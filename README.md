@@ -15,4 +15,13 @@
 - Angular validation and async validation
 
 
+
+## Package Nuget
+```
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+Microsoft.EntityFrameworkCore.Design
+```
+
+
 <img src="/pictures/auto_scaling.png" title="auto scaling"  width="900">
