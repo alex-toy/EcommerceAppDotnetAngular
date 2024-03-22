@@ -16,6 +16,8 @@ builder.ConfigureServices();
 
 WebApplication app = builder.Build();
 
+app.UseStaticFiles();
+
 app.UseAuthorization();
 
 app.MapControllers();

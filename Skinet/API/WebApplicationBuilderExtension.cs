@@ -61,6 +61,7 @@ namespace API
         {
             builder.Services.AddScoped<IProductRepo, ProductRepo>();
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }
