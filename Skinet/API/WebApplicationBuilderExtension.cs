@@ -1,4 +1,6 @@
-﻿using API.Data;
+﻿using Core.Interfaces;
+using Infrastructure.Data;
+using Infrastructure.Repos;
 using Microsoft.EntityFrameworkCore;
 
 namespace API
@@ -55,9 +57,10 @@ namespace API
         //    });
         //}
 
-        //public static void ConfigureServices(this WebApplicationBuilder builder)
-        //{
-        //    builder.Services.AddTransient<ITokenService, TokenService>();
-        //}
+        public static void ConfigureServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<IProductRepo, ProductRepo>();
+            builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+        }
     }
 }

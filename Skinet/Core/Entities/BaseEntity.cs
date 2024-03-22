@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Entities;
+namespace Core.Entities;
 
-public class Product
+public class BaseEntity
 {
     [Key]
     public int Id { get; set; }
-    public string Name { get; set; }
 }

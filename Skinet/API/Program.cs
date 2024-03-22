@@ -1,6 +1,6 @@
 using API;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
@@ -8,16 +8,18 @@ builder.ConfigureDbContext();
 //builder.ConfigureIdentity();
 //builder.ConfigureAuthentication();
 //builder.ConfigureJwtBearer();
-//builder.ConfigureServices();
+builder.ConfigureServices();
 
 
 
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.SeedDatabaseAsync();
 
 app.Run();
