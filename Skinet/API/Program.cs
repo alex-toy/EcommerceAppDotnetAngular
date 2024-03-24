@@ -1,4 +1,4 @@
-using API;
+using API.Extensions;
 using API.Middlewares;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -22,11 +22,8 @@ builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

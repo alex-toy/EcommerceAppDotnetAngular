@@ -8,6 +8,10 @@ public class BaseSpecification<T> : ISpecification<T>
 
     public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
 
+    public Expression<Func<T, object>> OrderBy { get; private set; }
+
+    public Expression<Func<T, object>> OrderByDesc { get; private set; }
+
     public BaseSpecification()
     {
         
@@ -21,5 +25,15 @@ public class BaseSpecification<T> : ISpecification<T>
     protected void AddInclude(Expression<Func<T, object>> expression)
     {
         Includes.Add(expression);
+    }
+
+    protected void AddOrderBy(Expression<Func<T, object>> expression)
+    {
+        OrderBy = expression;
+    }
+
+    protected void AddOrderByDesc(Expression<Func<T, object>> expression)
+    {
+        OrderByDesc = expression;
     }
 }

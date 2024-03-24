@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Infrastructure.Data;
 
@@ -10,10 +11,11 @@ public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
         var query = inputQuery;
 
-        if (spec.Criteria != null)
-        {
-            query = query.Where(spec.Criteria);
-        }
+        if (spec.Criteria is not null) query = query.Where(spec.Criteria);
+
+        if (spec.OrderBy is not null) query = query.OrderBy(spec.OrderBy);
+
+        if (spec.OrderByDesc is not null) query = query.OrderBy(spec.OrderByDesc);
 
         query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
