@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class ProductController : ControllerBase
+public class ProductController : BaseApiController
 {
     private readonly IGenericRepo<Product> _productRepo;
     private readonly IGenericRepo<ProductType> _productTypeRepo;

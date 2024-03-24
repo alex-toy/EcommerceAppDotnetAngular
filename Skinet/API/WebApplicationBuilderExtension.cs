@@ -1,6 +1,8 @@
-﻿using Core.Interfaces;
+﻿using API.Errors;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repos;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API
@@ -61,7 +63,32 @@ namespace API
         {
             builder.Services.AddScoped<IProductRepo, ProductRepo>();
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+        }
+
+        public static void ConfigureAutoMapper(this WebApplicationBuilder builder)
+        {
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        }
+
+        public static void ConfigureApiBehaviorOptions(this WebApplicationBuilder builder)
+        {
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ActionContext =>
+                {
+                    string[] errors = ActionContext.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .SelectMany(e => e.Value.Errors)
+                        .Select(e => e.ErrorMessage).ToArray();
+
+                    var errorResponse = new ApiValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+
+                    return new BadRequestObjectResult(errorResponse);
+                };
+            });
         }
     }
 }
