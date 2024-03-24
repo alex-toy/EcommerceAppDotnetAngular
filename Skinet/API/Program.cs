@@ -15,6 +15,8 @@ builder.ConfigureApiBehaviorOptions();
 
 builder.Services.AddSwaggerGen();
 
+builder.ConfigureCORS();
+
 
 
 
@@ -30,6 +32,8 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseStaticFiles();
+
+app.UseCors("corsPolicy");
 
 app.UseAuthorization();
 

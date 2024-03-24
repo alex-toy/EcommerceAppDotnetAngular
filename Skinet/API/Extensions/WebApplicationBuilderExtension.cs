@@ -90,5 +90,16 @@ namespace API.Extensions
                 };
             });
         }
+
+        public static void ConfigureCORS(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("corsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
+        }
     }
 }

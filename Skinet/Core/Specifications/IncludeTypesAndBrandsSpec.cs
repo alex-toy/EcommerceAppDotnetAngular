@@ -1,18 +1,20 @@
 ﻿using Core.Entities;
+using System.Linq.Expressions;
 
 namespace Core.Specifications;
 
 public class IncludeTypesAndBrandsSpec : BaseSpecification<Product>
 {
-    public IncludeTypesAndBrandsSpec(string sort)
+    public IncludeTypesAndBrandsSpec(ProductSpecParams productSpecParams) : base(Filter(productSpecParams))
     {
         AddInclude(p => p.ProductType);
         AddInclude(p => p.ProductBrand);
         AddOrderBy(p => p.Name);
+        ApplyPaging(productSpecParams.PageSize * (productSpecParams.PageIndex - 1), productSpecParams.PageSize);
 
-        if (!string.IsNullOrEmpty(sort))
+        if (!string.IsNullOrEmpty(productSpecParams.Sort))
         {
-            switch (sort)
+            switch (productSpecParams.Sort)
             {
                 case "priceAsc":
                     AddOrderBy(p => p.Price);
@@ -31,5 +33,12 @@ public class IncludeTypesAndBrandsSpec : BaseSpecification<Product>
     {
         AddInclude(p => p.ProductType);
         AddInclude(p => p.ProductBrand);
+    }
+
+    private static Expression<Func<Product, bool>> Filter(ProductSpecParams productSpecParams)
+    {
+        return p => (!productSpecParams.BrandId.HasValue || p.ProductBrandId == productSpecParams.BrandId) && 
+                    (!productSpecParams.TypeId.HasValue || p.ProductTypeId == productSpecParams.TypeId) && 
+                    (string.IsNullOrEmpty(productSpecParams.Search) || p.Name.ToLower().Contains(productSpecParams.Search));
     }
 }

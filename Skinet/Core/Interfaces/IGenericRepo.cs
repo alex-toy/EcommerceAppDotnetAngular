@@ -10,4 +10,5 @@ public interface IGenericRepo<T> where T : BaseEntity
     Task<T> GetEntityWithSpec(ISpecification<T> spec);
     Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
     Task<T> CreateAsync(T entity);
+    Task<int> CountAsync(ISpecification<T> spec);
 }

@@ -1,7 +1,6 @@
 ﻿using Core.Entities;
 using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Infrastructure.Data;
 
@@ -15,7 +14,9 @@ public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
 
         if (spec.OrderBy is not null) query = query.OrderBy(spec.OrderBy);
 
-        if (spec.OrderByDesc is not null) query = query.OrderBy(spec.OrderByDesc);
+        if (spec.OrderByDesc is not null) query = query.OrderByDescending(spec.OrderByDesc);
+
+        if (spec.IsPagingEnabled) query = query.Skip(spec.Skip).Take(spec.Take);
 
         query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
