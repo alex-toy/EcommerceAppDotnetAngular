@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ShopService } from './shop.service';
 import { Product } from '../shared/models/product';
 import { Type } from '../shared/models/type';
@@ -11,6 +11,7 @@ import { ShopParams } from '../shared/models/shopParams';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
+  @ViewChild('search') searchTerm? : ElementRef;
   products : Product[] = [];
   brands : Brand[] = [];
   types : Type[] = [];
@@ -20,6 +21,7 @@ export class ShopComponent implements OnInit {
     {name:'Price asc', value:'priceAsc'},
     {name:'Price desc', value:'priceDesc'},
   ];
+  totalCount : number = 0;
 
   constructor(private shopService : ShopService) {}
 
@@ -31,9 +33,14 @@ export class ShopComponent implements OnInit {
 
   getProducts(){
     this.shopService.getProducts(this.shopParams).subscribe({
-      next: response => this.products = response.items,
+      next: response => {
+        this.products = response.items;
+        this.shopParams.pageIndex = response.pageIndex;
+        this.shopParams.pageSize = response.pageSize;
+        this.totalCount = response.count;
+      },
       error: response => console.log(response),
-      complete: () => console.log(this.products)
+      // complete: () => console.log(this.products)
     });
   }
 
@@ -41,7 +48,7 @@ export class ShopComponent implements OnInit {
     this.shopService.getBrands().subscribe({
       next: response => this.brands = [{id:0, name:'All'}, ...response],
       error: response => console.log(response),
-      complete: () => console.log(this.brands)
+      // complete: () => console.log(this.brands)
     });
   }
 
@@ -49,22 +56,41 @@ export class ShopComponent implements OnInit {
     this.shopService.getTypes().subscribe({
       next: response => this.types = [{id:0, name:'All'}, ...response],
       error: response => console.log(response),
-      complete: () => console.log(this.types)
+      // complete: () => console.log(this.types)
     });
   }
 
   onBrandSelected(brandId : number){
     this.shopParams.brandId = brandId;
+    this.shopParams.pageIndex = 1;
     this.getProducts();
   }
 
   onTypeSelected(typeId : number){
     this.shopParams.typeId = typeId;
+    this.shopParams.pageIndex = 1;
     this.getProducts();
   }
 
   onSortSelected(event: any){
     this.shopParams.sort = event.target.value;
+    this.getProducts();
+  }
+
+  onPageChanged(pageIndex: number){
+    if (this.shopParams.pageIndex === pageIndex) return;
+    this.shopParams.pageIndex = pageIndex
+    this.getProducts();
+  }
+
+  onSearch(){
+    this.shopParams.search = this.searchTerm?.nativeElement.value;
+    this.shopParams.pageIndex = 1;
+    this.getProducts();
+  }
+
+  onReset(){
+    this.shopParams = new ShopParams();
     this.getProducts();
   }
 }
