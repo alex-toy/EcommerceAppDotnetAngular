@@ -30,7 +30,7 @@ public class BuggyController : BaseApiController
 
         var thingToReturn = thing.ToString();
 
-        return Ok();
+        return Ok(thingToReturn);
     }
 
     [HttpGet("badrequest")]
