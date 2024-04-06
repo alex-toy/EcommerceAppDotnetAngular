@@ -22,6 +22,12 @@ Microsoft.EntityFrameworkCore.SqlServer
 Microsoft.EntityFrameworkCore.Tools
 Microsoft.EntityFrameworkCore.Design
 ```
-
-
 <img src="/pictures/api.png" title="api"  width="900">
+
+
+
+## Redis
+```
+docker-compose up --detach 
+```
+<img src="/pictures/redis.png" title="redis"  width="900">

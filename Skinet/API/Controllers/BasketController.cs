@@ -8,19 +8,19 @@ namespace API.Controllers;
 
 public class BasketController : BaseApiController
 {
-    private readonly IBasketRepo _basketRepository;
+    private readonly IBasketRepo _basketRepo;
     private readonly IMapper _mapper;
 
     public BasketController(IBasketRepo basketRepository, IMapper mapper)
     {
         _mapper = mapper;
-        _basketRepository = basketRepository;
+        _basketRepo = basketRepository;
     }
 
     [HttpGet]
     public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
     {
-        var basket = await _basketRepository.GetBasketAsync(id);
+        var basket = await _basketRepo.GetBasketAsync(id);
 
         return Ok(basket ?? new CustomerBasket(id));
     }
@@ -28,9 +28,9 @@ public class BasketController : BaseApiController
     [HttpPost]
     public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
     {
-        var customerBasket = _mapper.Map<CustomerBasketDto, CustomerBasket>(basket);
+        CustomerBasket customerBasket = _mapper.Map<CustomerBasket>(basket);
 
-        var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
+        CustomerBasket updatedBasket = await _basketRepo.UpdateBasketAsync(customerBasket);
 
         return Ok(updatedBasket);
     }
@@ -38,6 +38,6 @@ public class BasketController : BaseApiController
     [HttpDelete]
     public async Task DeleteBasketAsync(string id)
     {
-        await _basketRepository.DeleteBasketAsync(id);
+        await _basketRepo.DeleteBasketAsync(id);
     }
 }
