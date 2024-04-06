@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Infrastructure.Repos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions
 {
@@ -15,6 +16,16 @@ namespace API.Extensions
             {
                 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
+            });
+        }
+
+        public static void ConfigureRedis(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                string connectionString = builder.Configuration.GetConnectionString("Redis");
+                ConfigurationOptions options = ConfigurationOptions.Parse(connectionString);
+                return ConnectionMultiplexer.Connect(options);
             });
         }
 
@@ -62,6 +73,7 @@ namespace API.Extensions
         public static void ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IProductRepo, ProductRepo>();
+            builder.Services.AddScoped<IBasketRepo, BasketRepo>();
             builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
         }
 

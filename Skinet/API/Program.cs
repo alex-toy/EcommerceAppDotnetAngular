@@ -6,6 +6,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.ConfigureDbContext();
+builder.ConfigureRedis();
 //builder.ConfigureIdentity();
 //builder.ConfigureAuthentication();
 //builder.ConfigureJwtBearer();
