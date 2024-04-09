@@ -1,10 +1,16 @@
 ﻿using API.Errors;
+using Core.Entities.Identities;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Infrastructure.Repos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using System.Text;
 
 namespace API.Extensions
 {
@@ -13,6 +19,12 @@ namespace API.Extensions
         public static void ConfigureDbContext(this WebApplicationBuilder builder)
         {
             builder.Services.AddDbContext<StoreContext>(options =>
+            {
+                string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(connectionString);
+            });
+
+            builder.Services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
@@ -29,22 +41,33 @@ namespace API.Extensions
             });
         }
 
-        //public static void ConfigureIdentity(this WebApplicationBuilder builder)
-        //{
-        //    builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-        //        .AddEntityFrameworkStores<DatabaseContext>()
-        //        .AddDefaultTokenProviders();
-        //}
+        public static void ConfigureIdentity(this WebApplicationBuilder builder)
+        {
+            IdentityBuilder identity = builder.Services.AddIdentityCore<AppUser>();
 
-        //public static void ConfigureAuthentication(this WebApplicationBuilder builder)
-        //{
-        //    builder.Services.AddAuthentication(options =>
-        //    {
-        //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    });
-        //}
+            IdentityBuilder identityBuilder = new IdentityBuilder(identity.UserType, builder.Services);
+            identityBuilder.AddEntityFrameworkStores<AppIdentityDbContext>();
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+        }
+
+        public static void ConfigureAuthentication(this WebApplicationBuilder builder)
+        {
+            string key = builder.Configuration["Token:Key"];
+            string issuer = builder.Configuration["Token:Issuer"];
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                        ValidIssuer = issuer,
+                        ValidateIssuer = true,
+                        ValidateAudience = false
+                    };
+                });
+        }
 
         //public static void ConfigureJwtBearer(this WebApplicationBuilder builder)
         //{

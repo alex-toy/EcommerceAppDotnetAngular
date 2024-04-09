@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Core.Entities.Baskets;
 
 public class BasketItem
 {

@@ -2,7 +2,7 @@
 using API.Errors;
 using API.Helpers;
 using AutoMapper;
-using Core.Entities;
+using Core.Entities.Products;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;

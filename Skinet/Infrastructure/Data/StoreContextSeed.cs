@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Core.Entities.Products;
 using System.Text.Json;
 
 namespace Infrastructure.Data;

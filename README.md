@@ -31,3 +31,24 @@ Microsoft.EntityFrameworkCore.Design
 docker-compose up --detach 
 ```
 <img src="/pictures/redis.png" title="redis"  width="900">
+
+
+
+## Identity
+
+- in **API**
+```
+Microsoft.AspNetCore.Authentication.JwtBearer
+```
+
+- in **Core**
+```
+Microsoft.AspNetCore.Identity.EntityFrameworkCore
+```
+
+- in **Infrastructure**
+```
+Microsoft.AspNetCore.Identity
+Microsoft.IdentityModel.Tokens
+System.IdentityModel.Tokens.Jwt
+```

@@ -7,9 +7,8 @@ builder.Services.AddControllers();
 
 builder.ConfigureDbContext();
 builder.ConfigureRedis();
-//builder.ConfigureIdentity();
-//builder.ConfigureAuthentication();
-//builder.ConfigureJwtBearer();
+builder.ConfigureIdentity();
+builder.ConfigureAuthentication();
 builder.ConfigureServices();
 builder.ConfigureAutoMapper();
 builder.ConfigureApiBehaviorOptions();
@@ -36,6 +35,7 @@ app.UseStaticFiles();
 
 app.UseCors("corsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

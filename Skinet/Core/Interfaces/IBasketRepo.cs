@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Core.Entities.Baskets;
 
 namespace Core.Interfaces;
 

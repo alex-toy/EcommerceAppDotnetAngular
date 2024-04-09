@@ -1,6 +1,7 @@
 ﻿using API.Dtos;
 using AutoMapper;
-using Core.Entities;
+using Core.Entities.Baskets;
+using Core.Entities.Products;
 using StackExchange.Redis;
 
 namespace API.Helpers

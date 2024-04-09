@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Core.Entities.Baskets;
 using Core.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;

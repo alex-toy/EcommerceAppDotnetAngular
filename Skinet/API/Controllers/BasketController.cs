@@ -1,6 +1,6 @@
 ﻿using API.Dtos;
 using AutoMapper;
-using Core.Entities;
+using Core.Entities.Baskets;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
